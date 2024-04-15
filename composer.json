@@ -5,7 +5,7 @@
     "license": ["proprietary"],
     "require": {
         "php": "^8.2",
-        "micro-module/fault-tolerance": "0.9"
+        "micro-module/fault-tolerance": "^0.9"
     },
     "require-dev": {
         "micro-module/null": "^v0.11",
