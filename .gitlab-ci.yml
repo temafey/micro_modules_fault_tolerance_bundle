@@ -1,0 +1,85 @@
+fault-tolerance-bundle_base_image:
+  tags:
+    - dev
+  variables:
+    IMAGE: $CI_REGISTRY/${CI_PROJECT_PATH}/component-fault-tolerance-bundle/app_test:$CI_COMMIT_REF_SLUG
+    DOCKER_DIR: packages/FaultToleranceBundle/.docker/app_test
+  stage: base_image
+  only:
+    changes:
+      - packages/FaultToleranceBundle/**/*
+  script:
+    - docker_build_file $IMAGE $DOCKER_DIR/Dockerfile
+    - docker push $IMAGE
+
+# app_test begin
+fault-tolerance-bundle_style-phpstan:
+  variables:
+    IMAGE: $CI_REGISTRY/${CI_PROJECT_PATH}/component-fault-tolerance-bundle/app_test:$CI_COMMIT_REF_SLUG
+  only:
+    changes:
+      - packages/FaultToleranceBundle/**/*
+  extends: .dev_app_test
+  script:
+    - docker run --rm -t $IMAGE vendor/bin/phpstan analyse -l 6 -c phpstan.neon src tests
+
+fault-tolerance-bundle_style-psalm:
+  variables:
+    IMAGE: $CI_REGISTRY/${CI_PROJECT_PATH}/component-fault-tolerance-bundle/app_test:$CI_COMMIT_REF_SLUG
+  only:
+    changes:
+      - packages/FaultToleranceBundle/**/*
+  extends: .dev_app_test
+  script:
+    - docker run --rm -t $IMAGE vendor/bin/psalm --config=psalm.xml
+
+fault-tolerance-bundle_lint-paralell:
+  variables:
+    IMAGE: $CI_REGISTRY/${CI_PROJECT_PATH}/component-fault-tolerance-bundle/app_test:$CI_COMMIT_REF_SLUG
+  only:
+    changes:
+      - packages/FaultToleranceBundle/**/*
+  extends: .dev_app_test
+  script:
+    - docker run --rm -t $IMAGE vendor/bin/parallel-lint ./ --exclude vendor --exclude bin/.phpunit
+
+fault-tolerance-bundle_coding-standards-ecs:
+  variables:
+    IMAGE: $CI_REGISTRY/${CI_PROJECT_PATH}/component-fault-tolerance-bundle/app_test:$CI_COMMIT_REF_SLUG
+  only:
+    changes:
+      - packages/FaultToleranceBundle/**/*
+  extends: .dev_app_test
+  script:
+    - docker run --rm -t $IMAGE vendor/bin/ecs check src tests
+
+fault-tolerance-bundle_coding-standards-phpmd:
+  variables:
+    IMAGE: $CI_REGISTRY/${CI_PROJECT_PATH}/component-fault-tolerance-bundle/app_test:$CI_COMMIT_REF_SLUG
+  only:
+    changes:
+      - packages/FaultToleranceBundle/**/*
+  extends: .dev_app_test
+  script:
+    - docker run --rm -t $IMAGE vendor/bin/phpmd src/ text phpmd.xml
+
+fault-tolerance-bundle_phpunit:
+  variables:
+    IMAGE: $CI_REGISTRY/${CI_PROJECT_PATH}/component-fault-tolerance-bundle/app_test:$CI_COMMIT_REF_SLUG
+  only:
+    changes:
+      - packages/FaultToleranceBundle/**/*
+  extends: .dev_app_test
+  script:
+    - docker run --rm -t $IMAGE vendor/bin/phpunit --testsuite unit-tests
+
+fault-tolerance-bundle_composer-validate:
+  variables:
+    IMAGE: $CI_REGISTRY/${CI_PROJECT_PATH}/component-fault-tolerance-bundle/app_test:$CI_COMMIT_REF_SLUG
+  only:
+    changes:
+      - packages/FaultToleranceBundle/**/*
+  extends: .dev_app_test
+  script:
+    - docker run --rm -t $IMAGE composer validate --no-check-publish
+# app_test end

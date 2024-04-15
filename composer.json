@@ -1,0 +1,41 @@
+{
+    "name": "micro-module/fault-tolerance-bundle",
+    "type": "library",
+    "description": "MicroModule FaultTolerance symfony bundle",
+    "license": ["proprietary"],
+    "require": {
+        "php": "^8.2",
+        "micro-module/fault-tolerance": "0.9"
+    },
+    "require-dev": {
+        "micro-module/null": "^v0.11",
+        "php-parallel-lint/php-console-highlighter": "^1.0",
+        "php-parallel-lint/php-parallel-lint": "^1.3",
+        "mockery/mockery": "^1.6",
+        "myclabs/deep-copy": "^1.11",
+        "phpmd/phpmd": "^2.15",
+        "phpstan/phpstan": "^1.10",
+        "phpstan/phpstan-mockery": "^1.1",
+        "phpstan/phpstan-phpunit": "^1.3",
+        "phpunit/phpunit": "^10.5",
+        "symfony/phpunit-bridge": "*",
+        "symplify/easy-coding-standard": "^12.1",
+        "vimeo/psalm": "^5.23"
+    },
+    "config": {
+        "preferred-install": {
+            "*": "dist"
+        },
+        "sort-packages": true
+    },
+    "autoload": {
+        "psr-4": {
+            "MicroModule\\FaultToleranceBundle\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "MicroModule\\FaultToleranceBundle\\Tests\\Unit\\": "tests/unit"
+        }
+    }
+}
